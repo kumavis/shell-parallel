@@ -18,8 +18,6 @@ const commands = [].concat(
     noisyCommands.map(command => ({ command, noisy: true }))
 )
 
-console.log(commands)
-
 const children = commands.map(({ command, noisy }) => {
   const child = spawn('sh', ['-c', command], { env: process.env })
   console.log(`spawned (${child.pid}): "${command}"`)
