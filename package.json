@@ -1,0 +1,27 @@
+{
+  "name": "shell-parallel",
+  "version": "1.0.0",
+  "description": "run commands in parallel, exit all when one ends. exit code used to exit main process. ``` -x to run noisily (pipe to stdout/stderr) -s to run silently (dont pipe to stdout/stderr) ```",
+  "main": "index.js",
+  "bin": {
+    "shell-parallel": "index.js"
+  },
+  "dependencies": {
+    "once": "^1.4.0",
+    "yargs": "^11.0.0"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "kumavis",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/kumavis/shell-parallel.git"
+  },
+  "bugs": {
+    "url": "https://github.com/kumavis/shell-parallel/issues"
+  },
+  "homepage": "https://github.com/kumavis/shell-parallel#readme"
+}
