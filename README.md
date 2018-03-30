@@ -1,5 +1,7 @@
 # shell-parallel
 
+[![Greenkeeper badge](https://badges.greenkeeper.io/kumavis/shell-parallel.svg)](https://greenkeeper.io/)
+
 run commands in parallel, exit all when one ends.
 exit code used to exit main process.
 ```
