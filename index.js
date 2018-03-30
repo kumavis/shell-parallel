@@ -1,3 +1,4 @@
+#!/usr/bin/env node
 const spawn = require('child_process').spawn
 const once = require('once')
 const argv = require('yargs').argv
@@ -10,8 +11,8 @@ const argv = require('yargs').argv
 //   node development/shell-parallel.js -s 'npm run ganache:start' -x 'npm run test:screens:run'
 
 // generate child processes
-const silentCommands = Array.isArray(argv.s) ? argv.s : [argv.s]
-const noisyCommands = Array.isArray(argv.x) ? argv.x : [argv.x]
+const silentCommands = toArray(argv.s)
+const noisyCommands = toArray(argv.x)
 const commands = [].concat(
     silentCommands.map(command => ({ command, noisy: false })),
     noisyCommands.map(command => ({ command, noisy: true }))
@@ -44,4 +45,11 @@ function onEnd(child, exitCode) {
   children.forEach(child => child.kill())
   // exit with original exit code
   process.exit(exitCode)
+}
+
+function toArray(value) {
+  if (value) {
+    return Array.isArray(value) ? value : [value]
+  }
+  return []
 }
