@@ -1,7 +1,11 @@
 #!/usr/bin/env node
+const pify = require('pify')
 const spawn = require('child_process').spawn
+const exec = pify(require('child_process').exec)
 const once = require('once')
 const argv = require('yargs').argv
+const psTree = pify(require('ps-tree'))
+
 
 // run commands in parallel, exit all when one ends
 // -x to run noisily (pipe to stdout/stderr)
@@ -33,14 +37,22 @@ const children = commands.map(({ command, noisy }) => {
 // listen for any to end
 const onEndOnce = once(onEnd)
 children.forEach((child) => {
-  child.once('exit', onEndOnce.bind(null, child))
+  child.once('exit', async (exitCode) => {
+    try {
+      await onEndOnce(child, exitCode)
+    } catch(err) {
+      throw err
+    }
+  })
 })
 
 // end all, exit with child's exit code
-function onEnd(child, exitCode) {
+async function onEnd(child, exitCode) {
   console.log(`exited: "${child.command}"`)
   // kill all
-  children.forEach(child => child.kill())
+  for (let child of children) {
+    await killProcessTree(child)
+  }
   // exit with original exit code
   process.exit(exitCode)
 }
@@ -50,4 +62,15 @@ function toArray(value) {
     return Array.isArray(value) ? value : [value]
   }
   return []
+}
+
+async function killProcessTree(rootProcess) {
+  const children = await psTree(rootProcess.pid)
+  const childPids = children.map(process => process.PID)
+  // kill children
+  if (childPids.length) {
+    await exec(`kill -9 ${childPids.join(' ')}`)
+  }
+  // kill root
+  rootProcess.kill('SIGKILL')
 }
