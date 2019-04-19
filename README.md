@@ -1,3 +1,8 @@
+# warning - not maintained
+
+please use https://github.com/kimmobrunfeldt/concurrently
+
+
 # shell-parallel
 
 run commands in parallel, exit all when one ends.
